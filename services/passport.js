@@ -15,10 +15,15 @@ passport.use(
       callbackURL: "/auth/google/callback"
     },
     (accsesToken, refreshtoken, profile, done) => {
-      //1. create modelinstance
-      const newUser = new User({ googleID: profile.id });
-      //2. save modelinstance to mongodb
-      newUser.save();
+      User.findOne({ googleID: profile.id }).then(existingUser => {
+        if (existingUser) {
+        } else {
+          //1. create modelinstance
+          const newUser = new User({ googleID: profile.id });
+          //2. save modelinstance to mongodb
+          newUser.save();
+        }
+      });
     }
   )
 );
